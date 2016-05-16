@@ -3,7 +3,7 @@ package test;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "person")
+@Table(name = "test")
 public class TestEntity {
 
     @Id
@@ -11,10 +11,14 @@ public class TestEntity {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "last_Name")
+    @Column(name = "name")
     private String lastName;
 
     public TestEntity() {
+    }
+
+    public TestEntity(String lastName) {
+        this.lastName = lastName;
     }
 
     public int getId() {

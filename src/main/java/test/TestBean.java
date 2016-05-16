@@ -42,6 +42,8 @@ public class TestBean {
 
         Query query = em.createQuery("select r from TestEntity r");
         List<TestEntity> list = query.getResultList();
+
+        em.merge(new TestEntity("test"));
         int a = 1;
     }
 }
