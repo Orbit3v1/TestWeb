@@ -4,12 +4,21 @@ package test;
 import org.springframework.context.annotation.Scope;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import test.attachment.Attachment;
+import test.attachment.Content;
 
+import javax.annotation.PostConstruct;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.OptimisticLockException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.servlet.http.Part;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 @Named("testBean")
@@ -21,7 +30,16 @@ public class TestBean {
     @PersistenceContext
     private EntityManager em;
 
+    private List<Attachment> attachments;
+    private Part file;
+
     public TestBean() {
+    }
+
+    @PostConstruct
+    public void init() {
+        Query query = em.createQuery("select r from Attachment r");
+        attachments = query.getResultList();
     }
 
     public String getName() {
@@ -70,4 +88,78 @@ public class TestBean {
     }
 
 
+    @Transactional
+    public void upload() {
+        Attachment attachment = new Attachment();
+        try {
+            InputStream input = file.getInputStream();
+            byte[] content = new byte[(int) file.getSize()];
+            input.read(content);
+
+
+            attachment.setName(getFilename(file));
+            attachment.setSize(file.getSize());
+            attachment.setContent(content);
+            attachment.setType(file.getContentType());
+            attachment = em.merge(attachment);
+            attachments.add(attachment);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private String getFilename(Part part) {
+        for (String cd : part.getHeader("content-disposition").split(";")) {
+            if (cd.trim().startsWith("filename")) {
+                String filename = cd.substring(cd.indexOf('=') + 1).trim().replace("\"", "");
+                return filename.substring(filename.lastIndexOf('/') + 1).substring(filename.lastIndexOf('\\') + 1);
+            }
+        }
+        return null;
+    }
+
+
+
+
+    public void download(Attachment attachment){
+
+        FacesContext fc = FacesContext.getCurrentInstance();
+        ExternalContext ec = fc.getExternalContext();
+        ec.responseReset();
+        ec.setResponseContentType(attachment.getType());
+        ec.setResponseContentLength((int) attachment.getSize());
+        ec.setResponseHeader("Content-Disposition", "attachment; filename=\"" + attachment.getName() + "\"");
+
+        try {
+            Content content = em.find(Content.class, attachment.getId());
+            OutputStream output = ec.getResponseOutputStream();
+            output.write(content.getContent());
+//            OutputStream output = ec.getResponseOutputStream();
+//            output.write(attachment.getContent());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        fc.responseComplete();
+
+    }
+
+
+    public List<Attachment> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<Attachment> attachments) {
+        this.attachments = attachments;
+    }
+
+    public Part getFile() {
+        return file;
+    }
+
+    public void setFile(Part file) {
+        this.file = file;
+    }
 }
