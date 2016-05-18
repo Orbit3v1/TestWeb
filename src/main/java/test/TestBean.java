@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import test.attachment.Attachment;
 import test.attachment.Content;
+import test.attachment.Nomenclature;
 
 import javax.annotation.PostConstruct;
 import javax.faces.context.ExternalContext;
@@ -40,6 +41,9 @@ public class TestBean {
     public void init() {
         Query query = em.createQuery("select r from Attachment r");
         attachments = query.getResultList();
+
+        Nomenclature n = em.find(Nomenclature.class, 4);
+
     }
 
     public String getName() {
