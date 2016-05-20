@@ -19,14 +19,14 @@ public class Attachment  {
     @Column(name = "size")
     private long size;
 
-//    @OneToOne(optional = false, fetch=FetchType.LAZY, mappedBy="attachment", cascade = CascadeType.ALL)
-//    private Content content;
+    @OneToOne(optional = false, fetch=FetchType.LAZY, mappedBy="attachment", cascade = CascadeType.ALL)
+    private Content content;
 
-    @Column(name = "content")
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-   // @Type(type="org.hibernate.type.PrimitiveByteArrayBlobType")
-    private byte[] content;
+//    @Column(name = "content")
+//    @Lob
+//    @Basic(fetch = FetchType.LAZY)
+//   // @Type(type="org.hibernate.type.PrimitiveByteArrayBlobType")
+//    private byte[] content;
 
     @Column(name = "type")
     private String type;
@@ -70,13 +70,13 @@ public class Attachment  {
         this.size = size;
     }
 
-//    public Content getContent() {
-//        return content;
-//    }
-//
-//    public void setContent(Content content) {
-//        this.content = content;
-//    }
+    public Content getContent() {
+        return content;
+    }
+
+    public void setContent(Content content) {
+        this.content = content;
+    }
 
     public String getType() {
         return type;
@@ -86,11 +86,11 @@ public class Attachment  {
         this.type = type;
     }
 
-    public byte[] getContent() {
-        return content;
-    }
-
-    public void setContent(byte[] content) {
-        this.content = content;
-    }
+//    public byte[] getContent() {
+//        return content;
+//    }
+//
+//    public void setContent(byte[] content) {
+//        this.content = content;
+//    }
 }

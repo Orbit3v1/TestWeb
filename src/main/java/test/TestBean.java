@@ -42,7 +42,7 @@ public class TestBean {
         Query query = em.createQuery("select r from Attachment r");
         attachments = query.getResultList();
 
-        Nomenclature n = em.find(Nomenclature.class, 4);
+//        Nomenclature n = em.find(Nomenclature.class, 4);
 
     }
 
@@ -100,11 +100,18 @@ public class TestBean {
             byte[] content = new byte[(int) file.getSize()];
             input.read(content);
 
+            Content c = new Content();
+            c.setContent(content);
 
             attachment.setName(getFilename(file));
             attachment.setSize(file.getSize());
-            attachment.setContent(content);
+            attachment.setContent(c);
             attachment.setType(file.getContentType());
+
+
+            Content cm = em.merge(attachment.getContent());
+            attachment.setId(cm.getId());
+            attachment.setContent(cm);
             attachment = em.merge(attachment);
             attachments.add(attachment);
 
