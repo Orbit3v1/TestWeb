@@ -172,6 +172,26 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.38</version>
         </dependency>
+
+
+        <!--RichFaces-->
+        <dependency>
+            <groupId>org.richfaces</groupId>
+            <artifactId>richfaces</artifactId>
+            <version>${richfaces.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.richfaces</groupId>
+            <artifactId>richfaces-core</artifactId>
+            <version>${richfaces.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.richfaces</groupId>
+            <artifactId>richfaces-a4j</artifactId>
+            <version>${richfaces.version}</version>
+        </dependency>
     </dependencies>
 
 

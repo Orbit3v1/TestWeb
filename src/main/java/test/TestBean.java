@@ -24,7 +24,6 @@ import java.util.List;
 
 @Named("testBean")
 @Scope("request")
-
 public class TestBean {
 
     private String name = "test";
