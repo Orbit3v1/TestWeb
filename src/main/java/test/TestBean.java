@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import org.apache.log4j.Logger;
+import test.order.LogChild;
 
 @Named("testBean")
 @Scope("request")
@@ -30,6 +32,8 @@ public class TestBean {
     @PersistenceContext
     private EntityManager em;
 
+    private Logger logger = Logger.getLogger(getClass());
+
     private List<Attachment> attachments;
     private Part file;
 
@@ -38,6 +42,9 @@ public class TestBean {
 
     @PostConstruct
     public void init() {
+        logger.debug("Hello World!");
+        LogChild lc = new LogChild();
+        lc.writeLog();
         Query query = em.createQuery("select r from Attachment r");
         attachments = query.getResultList();
 
