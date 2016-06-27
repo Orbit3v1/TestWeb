@@ -11,5 +11,14 @@
         </el-resolver>
     </application>
 
+    <navigation-rule>
+        <from-view-id>/testInit.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{testInitRedirect.save(testInit.order)}</from-action>
+            <to-view-id>/index.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+
 
 </faces-config>
